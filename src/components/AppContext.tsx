@@ -1,31 +1,38 @@
 import { createContext, useEffect, useState } from "react"
 import { getAllLocalStorage } from "../services/storage"
+import { useNavigate } from "react-router-dom";
 
 interface IAppContext {
-    user: string,
-    isLoggedIn: boolean,
-    setIsLoggedIn: (isLoggedIn: boolean) => void
+  email: string,
+  setEmail: (email: string) => void
+  senha: string,
+  setSenha: (senha: string) => void
+  isLoggedIn: boolean,
+  setIsLoggedIn: (isLoggedIn: boolean) => void
 }
-  
 export const AppContext = createContext({} as IAppContext)
-  
+
 export const AppContextProvider = ({ children }: any) => {
-    const [ isLoggedIn, setIsLoggedIn ] = useState<boolean>(false)
+  const navigate = useNavigate()
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>('')
+  const [senha, setSenha] = useState<string>('')
 
-    const storage = getAllLocalStorage()
+  const storage = getAllLocalStorage()
 
-    useEffect(() => {
-      if(storage){
-        const { login } = JSON.parse(storage)
-        setIsLoggedIn(login)
-      }
-    }, [])
+  useEffect(() => {
+    if (storage) {
+      const { login } = JSON.parse(storage)
+      setIsLoggedIn(login)
+        if (login) {
+          navigate('/conta/1')
+        }
+    }
+  }, [])
 
-    const user = 'nathally'
-  
-    return (
-      <AppContext.Provider value={{ user, isLoggedIn, setIsLoggedIn }}>
-        { children }
-      </AppContext.Provider>
-    )
+  return (
+    <AppContext.Provider value={{ email, setEmail, senha, setSenha, isLoggedIn, setIsLoggedIn }}>
+      {children}
+    </AppContext.Provider>
+  )
 }
