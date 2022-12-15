@@ -28,7 +28,7 @@ export const AppContextProvider = ({ children }: any) => {
           navigate('/conta/1')
         }
     }
-  }, [])
+  }, [storage, navigate])
 
   return (
     <AppContext.Provider value={{ email, setEmail, senha, setSenha, isLoggedIn, setIsLoggedIn }}>
